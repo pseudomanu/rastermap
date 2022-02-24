@@ -1,6 +1,6 @@
 function [iclustup, isort, Vout] = activityMap(S, ops)
 % sorts the matrix S (neurons by time) along the first axis
-% ops.nC = 30, number of clusters to use 
+% ops.nC = 10, number of clusters to use 
 % ops.iPC = 1:100, number of PCs to use 
 % ops.isort = [], initial sorting, otherwise will be the top PC sort
 % ops.useGPU = 0, whether to use the GPU
@@ -11,8 +11,8 @@ if nargin<2
    ops = []; 
 end
 %%
-ops.nC = getOr(ops, 'nC', 30);
-ops.iPC = getOr(ops, 'iPC', 1:200);
+ops.nC = getOr(ops, 'nC', 10);
+ops.iPC = getOr(ops, 'iPC', 1:100);
 ops.isort = getOr(ops, 'isort', []);
 ops.useGPU = getOr(ops, 'useGPU', 0);
 ops.upsamp = getOr(ops, 'upsamp', 100);
