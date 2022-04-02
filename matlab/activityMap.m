@@ -15,7 +15,7 @@ ops.nC = getOr(ops, 'nC', 10);
 ops.iPC = getOr(ops, 'iPC', 1:100);
 ops.isort = getOr(ops, 'isort', []);
 ops.useGPU = getOr(ops, 'useGPU', 0);
-ops.upsamp = getOr(ops, 'upsamp', 100);
+ops.upsamp = getOr(ops, 'upsamp', 50);
 ops.sigUp = getOr(ops, 'sigUp', 1);
 
 nC = ops.nC;
@@ -29,6 +29,8 @@ S = S - mean(S,2);
 %%
 if isempty(ops.isort)
     [~, isort] = sort(U(:,1), 'descend');
+else
+    isort = ops.isort;
 end
 iPC = ops.iPC;
 S = U(:, iPC) * Sv(iPC, iPC);

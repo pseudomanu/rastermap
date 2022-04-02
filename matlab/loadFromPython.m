@@ -6,7 +6,8 @@ S = S(logical(iscell(:,1)),:);
 
 %% full algorithm
 [isort1, isort2, Sm] = mapTmap(S);
-figure;imagesc(Sm(:,:),[0,5])
+figure;imagesc(Sm(:,:),[0,3])
+figure;imagesc(zscore(S(isort1,:),1,2),[0,3])
 
 %% run map in neurons without smoothing across time sorting
 [iclustup, isort, Vout] = activityMap(S);

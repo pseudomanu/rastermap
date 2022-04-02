@@ -8,8 +8,7 @@ if nargin<2
    ops = []; 
 end
 
-ops.nCall      = getOr(ops, 'nCall', [30 100]);
-
+ops.nCall      = getOr(ops, 'nCall', [6 100]);
 
 tic
 ops.nC = ops.nCall(2);
@@ -24,8 +23,8 @@ Sm = Sm(:, iresort);
 ops.nC = ops.nCall(1);
 [~, isort1, ~] = activityMap(Sm, ops);
 
-Sm = my_conv2(Sm(isort1, :), 10, 1); % smoothing across neurons here (10)
-Sm = zscore(Sm, 1, 2);
+Sm = my_conv2(Sm(isort1, :), 3, 1); % no smoothing across neurons here (10 in stringer version)
+%Sm = zscore(Sm, 1, 2);
 
 toc
 

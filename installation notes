@@ -1,0 +1,49 @@
+conda create -n rastermap python=3
+conda install numpy numba pip matplotlib scipy scikit-learn pyqt
+pip install pyqtgraph==0.11.0rc0 natsort scanimage-tiff-reader
+
+PyQT issue:
+	pip install PyQt5 PyQt5.sip 
+	conda install -c conda-forge pyqt-impl
+
+both fail with: 
+AttributeError: module 'PyQt5.QtGui' has no attribute 'QWidget'
+
+fix: install pyqtgraph==0.11.0rc0
+
+python setup.py install
+
+
+(rastermap) D:\Code\rastermap>python -m rastermap
+
+
+error in master branch 
+Traceback (most recent call last):
+  File "C:\Users\pseud\.conda\envs\rastermap\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Users\pseud\.conda\envs\rastermap\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "D:\Code\rastermap\rastermap\__main__.py", line 58, in <module>
+    gui.run()
+  File "D:\Code\rastermap\rastermap\gui.py", line 991, in run
+    GUI = MainW()
+  File "D:\Code\rastermap\rastermap\gui.py", line 202, in __init__
+    self.win.ci.layout.setColumnStretchFactor(1, .1)
+TypeError: setColumnStretchFactor(self, int, int): argument 2 has unexpected type 'float'
+
+Traceback (most recent call last):
+  File "C:\Users\pseud\.conda\envs\rastermap\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Users\pseud\.conda\envs\rastermap\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "D:\Code\rastermap\rastermap\__main__.py", line 2, in <module>
+    from rastermap import gui
+  File "D:\Code\rastermap\rastermap\gui.py", line 8, in <module>
+    from . import menus, guiparts, io
+  File "D:\Code\rastermap\rastermap\menus.py", line 4, in <module>
+    from . import io
+  File "D:\Code\rastermap\rastermap\io.py", line 7, in <module>
+    from . import guiparts
+  File "D:\Code\rastermap\rastermap\guiparts.py", line 6, in <module>
+    from pyqtgraph import ItemSample
+ImportError: cannot import name 'ItemSample' from 'pyqtgraph' (C:\Users\pseud\.conda\envs\rastermap\lib\site-packages\pyqtgraph\__init__.py)
