@@ -2,12 +2,13 @@ import sys, time, os
 import numpy as np
 import pyqtgraph as pg
 from PyQt5 import QtGui, QtCore
+from PyQt5.QtWidgets import QPushButton, QButtonGroup, QLabel, QLineEdit, QGridLayout, QWidget, QMainWindow, QApplication, QCheckBox, QComboBox
 from matplotlib import cm
 from scipy.stats import zscore, pearsonr
 from .mapping import Rastermap
 from . import menus, guiparts, io
 
-class MainW(QtGui.QMainWindow):
+class MainW(QMainWindow):
     def __init__(self):
         super(MainW, self).__init__()
         pg.setConfigOptions(imageAxisOrder="row-major")
@@ -38,9 +39,9 @@ class MainW(QtGui.QMainWindow):
 
         menus.mainmenu(self)
 
-        self.cwidget = QtGui.QWidget(self)
+        self.cwidget = QWidget(self)
         self.setCentralWidget(self.cwidget)
-        self.l0 = QtGui.QGridLayout()
+        self.l0 = QGridLayout()
         self.cwidget.setLayout(self.l0)
         self.win = pg.GraphicsLayoutWidget()
         self.win.move(600,0)
@@ -113,22 +114,22 @@ class MainW(QtGui.QMainWindow):
 
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Options on top left of GUI ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         # add bin size across neurons
-        ysm = QtGui.QLabel("<font color='gray'>Bin neurons:</font>")
-        self.smooth = QtGui.QLineEdit(self)
+        ysm = QLabel("<font color='gray'>Bin neurons:</font>")
+        self.smooth = QLineEdit(self)
         self.smooth.setValidator(QtGui.QIntValidator(0, 500))
         self.smooth.setText("10")
         self.smooth.setFixedWidth(45)
         self.smooth.setAlignment(QtCore.Qt.AlignRight)
         self.smooth.returnPressed.connect(self.plot_activity)
 
-        params = QtGui.QLabel("<font color='gray'>Rastermap parameters</font>")
+        params = QLabel("<font color='gray'>Rastermap parameters</font>")
         params.setAlignment(QtCore.Qt.AlignCenter)
-        self.run_embedding_button = QtGui.QPushButton('Run embedding')
+        self.run_embedding_button = QPushButton('Run embedding')
         self.run_embedding_button.setFont(QtGui.QFont("Arial", 10, QtGui.QFont.Bold))
         self.run_embedding_button.clicked.connect(self.run_RMAP)
         self.run_embedding_button.setEnabled(False)
 
-        self.RadioGroup = QtGui.QButtonGroup()
+        self.RadioGroup = QButtonGroup()
         self.default_param_radiobutton = QtGui.QRadioButton("Default")
         self.default_param_radiobutton.setStyleSheet("color: gray;")
         self.default_param_radiobutton.setChecked(True)
@@ -139,18 +140,18 @@ class MainW(QtGui.QMainWindow):
         #self.custom_param_radiobutton.toggled.connect(lambda: io.get_rastermap_params(self))
         self.RadioGroup.addButton(self.custom_param_radiobutton)
 
-        self.heatmap_checkBox = QtGui.QCheckBox("Behaviour")
+        self.heatmap_checkBox = QCheckBox("Behaviour")
         self.heatmap_checkBox.setStyleSheet("color: gray;")
         self.heatmap_checkBox.stateChanged.connect(self.update_plot_p4)
         self.heatmap_checkBox.setEnabled(False)
-        self.upload_behav_button = QtGui.QPushButton('Upload behavior')
+        self.upload_behav_button = QPushButton('Upload behavior')
         self.upload_behav_button.setFont(QtGui.QFont("Arial", 10, QtGui.QFont.Bold))
         self.upload_behav_button.clicked.connect(lambda: io.get_behav_data(self))
         self.upload_behav_button.setEnabled(False)
-        self.scatterplot_checkBox = QtGui.QCheckBox("Scatter plot")
+        self.scatterplot_checkBox = QCheckBox("Scatter plot")
         self.scatterplot_checkBox.setStyleSheet("color: gray;")
         self.scatterplot_checkBox.stateChanged.connect(self.update_plot_p5)
-        self.upload_run_button = QtGui.QPushButton('Upload run')
+        self.upload_run_button = QPushButton('Upload run')
         self.upload_run_button.setFont(QtGui.QFont("Arial", 10, QtGui.QFont.Bold))
         self.upload_run_button.clicked.connect(lambda: io.load_run_data(self))
         self.upload_run_button.setEnabled(False)
@@ -158,13 +159,13 @@ class MainW(QtGui.QMainWindow):
         # Add slider for levels  
         self.sat = [0.3,0.7]
         slider = guiparts.SatSlider(self)
-        sat_label = QtGui.QLabel("Saturation")
+        sat_label = QLabel("Saturation")
         sat_label.setStyleSheet('color: white;')
         self.img.setLevels([self.sat[0], self.sat[1]])
         self.imgROI.setLevels([self.sat[0], self.sat[1]])
 
         # Add drop down options for scatter plot
-        self.scatter_comboBox = QtGui.QComboBox(self)
+        self.scatter_comboBox = QComboBox(self)
         self.scatter_comboBox.setFixedWidth(120)
         scatter_comboBox_ops = ["-- Select --", "Run correlation", "Neuron position", "Neuron depth"]
         self.scatter_comboBox.setEditable(True)
@@ -175,10 +176,10 @@ class MainW(QtGui.QMainWindow):
         line_edit.setReadOnly(True)
         self.scatter_comboBox.setCurrentIndex(0)
         self.scatter_comboBox.hide()
-        self.all_neurons_checkBox = QtGui.QCheckBox("All neurons")
+        self.all_neurons_checkBox = QCheckBox("All neurons")
         self.all_neurons_checkBox.setStyleSheet("color: gray;")
         self.all_neurons_checkBox.hide()
-        self.scatterplot_button = QtGui.QPushButton('Plot')
+        self.scatterplot_button = QPushButton('Plot')
         self.scatterplot_button.setFont(QtGui.QFont("Arial", 10, QtGui.QFont.Bold))
         self.scatterplot_button.clicked.connect(self.plot_scatter_pressed)
         self.scatterplot_button.hide()
@@ -763,7 +764,7 @@ class MainW(QtGui.QMainWindow):
 
 def run():
     # Always start by initializing Qt (only once per application)
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     icon_path = os.path.join(
         os.path.dirname(os.path.realpath(__file__)), "logo.png"
     )
