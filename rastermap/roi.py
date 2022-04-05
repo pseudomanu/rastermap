@@ -1,6 +1,6 @@
 import pyqtgraph as pg
 import numpy as np
-from PyQt5 import QtGui, QtCore
+from PyQt5 import QtCore
 
 def triangle_area(p0, p1, p2):
     if p2.ndim < 2:

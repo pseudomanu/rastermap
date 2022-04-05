@@ -1,6 +1,7 @@
 import os, glob
 import numpy as np
-from PyQt5 import QtGui, QtCore, QtWidgets
+from PyQt5 import QtGui, QtCore
+from PyQt5.QtWidgets import QPushButton, QLineEdit, QMessageBox, QFileDialog, QCheckBox, QDialog, QHBoxLayout, QVBoxLayout, QLabel, QWidget
 import pyqtgraph as pg
 from scipy.stats import zscore
 import scipy.io as sio
@@ -9,7 +10,7 @@ from . import guiparts
 def load_mat(parent, name=None): # Load data matrix (neurons x time)
     try:
         if name is None:
-            name = QtGui.QFileDialog.getOpenFileName(
+            name = QFileDialog.getOpenFileName(
                 parent, "Open *.npy", filter="*.npy *.mat")
             parent.fname = name[0]
             parent.filebase = name[0]
@@ -59,66 +60,66 @@ def load_mat(parent, name=None): # Load data matrix (neurons x time)
 
 def get_rastermap_params(parent):
     if parent.custom_param_radiobutton.isChecked() and parent.loaded:
-        dialog = QtWidgets.QDialog()
+        dialog = QDialog()
         dialog.setWindowTitle("Set rastermap parameters")
         dialog.setFixedWidth(600)
-        dialog.verticalLayout = QtWidgets.QVBoxLayout(dialog)
+        dialog.verticalLayout = QVBoxLayout(dialog)
 
         # Param options
-        dialog.n_components_label = QtWidgets.QLabel(dialog)
+        dialog.n_components_label = QLabel(dialog)
         dialog.n_components_label.setTextFormat(QtCore.Qt.RichText)
         dialog.n_components_label.setText("n_components:")
-        dialog.n_components = QtGui.QLineEdit()# QtWidgets.QLabel(dialog)
+        dialog.n_components = QLineEdit()# QLabel(dialog)
         dialog.n_components.setText(str(1))
         dialog.n_components.setFixedWidth(45)
         dialog.n_components.setReadOnly(True)
 
-        dialog.n_clusters_label = QtWidgets.QLabel(dialog)
+        dialog.n_clusters_label = QLabel(dialog)
         dialog.n_clusters_label.setTextFormat(QtCore.Qt.RichText)
         dialog.n_clusters_label.setText("n_clusters:")
-        dialog.n_clusters = QtGui.QLineEdit()
+        dialog.n_clusters = QLineEdit()
         dialog.n_clusters.setText(str(50))
         dialog.n_clusters.setFixedWidth(45)
 
-        dialog.n_neurons_label = QtWidgets.QLabel(dialog)
+        dialog.n_neurons_label = QLabel(dialog)
         dialog.n_neurons_label.setTextFormat(QtCore.Qt.RichText)
         dialog.n_neurons_label.setText("n_neurons:")
-        dialog.n_neurons = QtGui.QLineEdit()
+        dialog.n_neurons = QLineEdit()
         dialog.n_neurons.setText(str(parent.sp.shape[0]))
         dialog.n_neurons.setFixedWidth(45)
 
-        dialog.grid_upsample_label = QtWidgets.QLabel(dialog)
+        dialog.grid_upsample_label = QLabel(dialog)
         dialog.grid_upsample_label.setTextFormat(QtCore.Qt.RichText)
         dialog.grid_upsample_label.setText("grid_upsample:")
-        dialog.grid_upsample = QtGui.QLineEdit()
+        dialog.grid_upsample = QLineEdit()
         dialog.grid_upsample.setText(str(10))
         dialog.grid_upsample.setFixedWidth(45)
 
-        dialog.n_splits_label = QtWidgets.QLabel(dialog)
+        dialog.n_splits_label = QLabel(dialog)
         dialog.n_splits_label.setTextFormat(QtCore.Qt.RichText)
         dialog.n_splits_label.setText("n_splits:")
-        dialog.n_splits = QtGui.QLineEdit()
+        dialog.n_splits = QLineEdit()
         dialog.n_splits.setText(str(4))
         dialog.n_splits.setFixedWidth(45)
 
-        dialog.time_label = QtWidgets.QLabel(dialog)
+        dialog.time_label = QLabel(dialog)
         dialog.time_label.setTextFormat(QtCore.Qt.RichText)
         dialog.time_label.setText("Time range:")
         dialog.slider = guiparts.TimeRangeSlider(parent)
         dialog.slider.setEnabled(False)
-        dialog.time_checkbox = QtGui.QCheckBox("Set time range")
+        dialog.time_checkbox = QCheckBox("Set time range")
         dialog.time_checkbox.setChecked(False)
         dialog.time_checkbox.toggled.connect(lambda: enable_time_range(dialog))
 
-        dialog.ok_button = QtGui.QPushButton('Ok')
+        dialog.ok_button = QPushButton('Ok')
         dialog.ok_button.setDefault(True)
         dialog.ok_button.clicked.connect(lambda: custom_set_params(parent, dialog))
-        dialog.cancel_button = QtGui.QPushButton('Cancel')
+        dialog.cancel_button = QPushButton('Cancel')
         dialog.cancel_button.clicked.connect(dialog.close)
 
         # Set layout of options
-        dialog.widget = QtWidgets.QWidget(dialog)
-        dialog.horizontalLayout = QtWidgets.QHBoxLayout(dialog.widget)
+        dialog.widget = QWidget(dialog)
+        dialog.horizontalLayout = QHBoxLayout(dialog.widget)
         dialog.horizontalLayout.setContentsMargins(-1, -1, -1, 0)
         dialog.horizontalLayout.setObjectName("horizontalLayout")
         dialog.horizontalLayout.addWidget(dialog.n_components_label)
@@ -126,8 +127,8 @@ def get_rastermap_params(parent):
         dialog.horizontalLayout.addWidget(dialog.n_clusters_label)
         dialog.horizontalLayout.addWidget(dialog.n_clusters)
 
-        dialog.widget2 = QtWidgets.QWidget(dialog)
-        dialog.horizontalLayout = QtWidgets.QHBoxLayout(dialog.widget2)
+        dialog.widget2 = QWidget(dialog)
+        dialog.horizontalLayout = QHBoxLayout(dialog.widget2)
         dialog.horizontalLayout.setContentsMargins(-1, -1, -1, 0)
         dialog.horizontalLayout.setObjectName("horizontalLayout")
         dialog.horizontalLayout.addWidget(dialog.n_neurons_label)
@@ -135,23 +136,23 @@ def get_rastermap_params(parent):
         dialog.horizontalLayout.addWidget(dialog.n_splits_label)
         dialog.horizontalLayout.addWidget(dialog.n_splits)
 
-        dialog.widget3 = QtWidgets.QWidget(dialog)
-        dialog.horizontalLayout = QtWidgets.QHBoxLayout(dialog.widget3)
+        dialog.widget3 = QWidget(dialog)
+        dialog.horizontalLayout = QHBoxLayout(dialog.widget3)
         dialog.horizontalLayout.setContentsMargins(-1, -1, -1, 0)
         dialog.horizontalLayout.setObjectName("horizontalLayout")
         dialog.horizontalLayout.addWidget(dialog.time_checkbox)
         dialog.horizontalLayout.addWidget(dialog.grid_upsample_label)
         dialog.horizontalLayout.addWidget(dialog.grid_upsample)
 
-        dialog.widget4 = QtWidgets.QWidget(dialog)
-        dialog.horizontalLayout = QtWidgets.QHBoxLayout(dialog.widget4)
+        dialog.widget4 = QWidget(dialog)
+        dialog.horizontalLayout = QHBoxLayout(dialog.widget4)
         dialog.horizontalLayout.setContentsMargins(-1, -1, -1, 0)
         dialog.horizontalLayout.setObjectName("horizontalLayout")
         dialog.horizontalLayout.addWidget(dialog.time_label)
         dialog.horizontalLayout.addWidget(dialog.slider)
 
-        dialog.widget5 = QtWidgets.QWidget(dialog)
-        dialog.horizontalLayout = QtWidgets.QHBoxLayout(dialog.widget5)
+        dialog.widget5 = QWidget(dialog)
+        dialog.horizontalLayout = QHBoxLayout(dialog.widget5)
         dialog.horizontalLayout.addWidget(dialog.cancel_button)
         dialog.horizontalLayout.addWidget(dialog.ok_button)
 
@@ -196,52 +197,52 @@ def custom_set_params(parent, dialogBox):
             parent.embed_time_range = -1
         parent.params_set = True
     except Exception as e:
-        QtGui.QMessageBox.about(parent, 'Error','Invalid input entered')
+        QMessageBox.about(parent, 'Error','Invalid input entered')
         #parent.update_status_bar(e)
         pass
     dialogBox.close()
 
 def get_behav_data(parent):
-    dialog = QtWidgets.QDialog()
+    dialog = QDialog()
     dialog.setWindowTitle("Upload behaviour files")
-    dialog.verticalLayout = QtWidgets.QVBoxLayout(dialog)
+    dialog.verticalLayout = QVBoxLayout(dialog)
 
     # Param options
-    dialog.behav_data_label = QtWidgets.QLabel(dialog)
+    dialog.behav_data_label = QLabel(dialog)
     dialog.behav_data_label.setTextFormat(QtCore.Qt.RichText)
     dialog.behav_data_label.setText("Behavior matrix (*.npy, *.mat):")
-    dialog.behav_data_button = QtGui.QPushButton('Upload')
+    dialog.behav_data_button = QPushButton('Upload')
     dialog.behav_data_button.setFont(QtGui.QFont("Arial", 10, QtGui.QFont.Bold))
     dialog.behav_data_button.clicked.connect(lambda: load_behav_file(parent, dialog.behav_data_button))
 
-    dialog.behav_comps_label = QtWidgets.QLabel(dialog)
+    dialog.behav_comps_label = QLabel(dialog)
     dialog.behav_comps_label.setTextFormat(QtCore.Qt.RichText)
     dialog.behav_comps_label.setText("(Optional) Behavior labels file (*.npy):")
-    dialog.behav_comps_button = QtGui.QPushButton('Upload')
+    dialog.behav_comps_button = QPushButton('Upload')
     dialog.behav_comps_button.setFont(QtGui.QFont("Arial", 10, QtGui.QFont.Bold))
     dialog.behav_comps_button.clicked.connect(lambda: load_behav_comps_file(parent, dialog.behav_comps_button))
 
-    dialog.ok_button = QtGui.QPushButton('Done')
+    dialog.ok_button = QPushButton('Done')
     dialog.ok_button.setDefault(True)
     dialog.ok_button.clicked.connect(dialog.close)
 
     # Set layout of options
-    dialog.widget = QtWidgets.QWidget(dialog)
-    dialog.horizontalLayout = QtWidgets.QHBoxLayout(dialog.widget)
+    dialog.widget = QWidget(dialog)
+    dialog.horizontalLayout = QHBoxLayout(dialog.widget)
     dialog.horizontalLayout.setContentsMargins(-1, -1, -1, 0)
     dialog.horizontalLayout.setObjectName("horizontalLayout")
     dialog.horizontalLayout.addWidget(dialog.behav_data_label)
     dialog.horizontalLayout.addWidget(dialog.behav_data_button)
 
-    dialog.widget1 = QtWidgets.QWidget(dialog)
-    dialog.horizontalLayout = QtWidgets.QHBoxLayout(dialog.widget1)
+    dialog.widget1 = QWidget(dialog)
+    dialog.horizontalLayout = QHBoxLayout(dialog.widget1)
     dialog.horizontalLayout.setContentsMargins(-1, -1, -1, 0)
     dialog.horizontalLayout.setObjectName("horizontalLayout")
     dialog.horizontalLayout.addWidget(dialog.behav_comps_label)
     dialog.horizontalLayout.addWidget(dialog.behav_comps_button)
 
-    dialog.widget2 = QtWidgets.QWidget(dialog)
-    dialog.horizontalLayout = QtWidgets.QHBoxLayout(dialog.widget2)
+    dialog.widget2 = QWidget(dialog)
+    dialog.horizontalLayout = QHBoxLayout(dialog.widget2)
     dialog.horizontalLayout.addWidget(dialog.ok_button)
 
     # Add options to dialog box
@@ -253,7 +254,7 @@ def get_behav_data(parent):
     dialog.exec_()
 
 def load_behav_comps_file(parent, button):
-    name = QtGui.QFileDialog.getOpenFileName(
+    name = QFileDialog.getOpenFileName(
         parent, "Open *.npy", filter="*.npy"
     )
     name = name[0]
@@ -283,13 +284,13 @@ def add_behav_checkboxes(parent):
         if len(parent.behav_labels) > 5:
             prompt_behav_comps_ind(parent)
         clear_old_behav_checkboxes(parent)
-        parent.heatmap_chkbxs.append(QtGui.QCheckBox("All"))
+        parent.heatmap_chkbxs.append(QCheckBox("All"))
         parent.heatmap_chkbxs[0].setStyleSheet("color: gray;")
         parent.heatmap_chkbxs[0].setChecked(True)
         parent.heatmap_chkbxs[0].toggled.connect(parent.behav_chkbx_toggled)
         parent.l0.addWidget(parent.heatmap_chkbxs[-1], 15, 12, 1, 2)
         for i, comp_ind in enumerate(parent.behav_labels_selected):
-            parent.heatmap_chkbxs.append(QtGui.QCheckBox(parent.behav_labels[comp_ind]))
+            parent.heatmap_chkbxs.append(QCheckBox(parent.behav_labels[comp_ind]))
             parent.heatmap_chkbxs[-1].setStyleSheet("color: gray;")
             parent.heatmap_chkbxs[-1].toggled.connect(parent.behav_chkbx_toggled)
             parent.heatmap_chkbxs[-1].setEnabled(False)
@@ -306,17 +307,17 @@ def clear_old_behav_checkboxes(parent):
     parent.heatmap_chkbxs = []
 
 def prompt_behav_comps_ind(parent):
-    dialog = QtWidgets.QDialog()
+    dialog = QDialog()
     dialog.setWindowTitle("Select max 5")
-    dialog.verticalLayout = QtWidgets.QVBoxLayout(dialog)
+    dialog.verticalLayout = QVBoxLayout(dialog)
 
     dialog.chkbxs = [] 
     for k in range(len(parent.behav_labels)):
-        dialog.chkbxs.append(QtGui.QCheckBox(parent.behav_labels[k]))
+        dialog.chkbxs.append(QCheckBox(parent.behav_labels[k]))
         dialog.chkbxs[k].setStyleSheet("color: black;")
         dialog.chkbxs[k].toggled.connect(lambda: restrict_behav_comps_selection(dialog, parent))
 
-    dialog.ok_button = QtGui.QPushButton('Done')
+    dialog.ok_button = QPushButton('Done')
     dialog.ok_button.setDefault(True)
     dialog.ok_button.clicked.connect(lambda: get_behav_comps_ind(dialog, parent))
 
@@ -345,7 +346,7 @@ def restrict_behav_comps_selection(dialog, parent):
             dialog.chkbxs[k].setChecked(False)
 
 def load_behav_file(parent, button):
-    name = QtGui.QFileDialog.getOpenFileName(
+    name = QFileDialog.getOpenFileName(
         parent, "Load behaviour data", filter="*.npy *.mat"
     )
     name = name[0]
@@ -419,7 +420,7 @@ def load_behav_dict(parent, beh):
         parent.plot_behav_binary_data()
 
 def load_run_data(parent):
-    name = QtGui.QFileDialog.getOpenFileName(
+    name = QFileDialog.getOpenFileName(
         parent, "Open *.npy", filter="*.npy"
     )
     name = name[0]
@@ -443,23 +444,23 @@ def load_run_data(parent):
         return
 
 def get_neuron_depth_data(parent):
-    dialog = QtWidgets.QDialog()
+    dialog = QDialog()
     dialog.setWindowTitle("Upload file")
-    dialog.verticalLayout = QtWidgets.QVBoxLayout(dialog)
+    dialog.verticalLayout = QVBoxLayout(dialog)
 
-    dialog.depth_label = QtWidgets.QLabel(dialog)
+    dialog.depth_label = QLabel(dialog)
     dialog.depth_label.setTextFormat(QtCore.Qt.RichText)
     dialog.depth_label.setText("Depth (Ephys):")
-    dialog.depth_button = QtGui.QPushButton('Upload')
+    dialog.depth_button = QPushButton('Upload')
     dialog.depth_button.setFont(QtGui.QFont("Arial", 10, QtGui.QFont.Bold))
     dialog.depth_button.clicked.connect(lambda: load_neuron_pos(parent, dialog.depth_button, depth=True))
 
-    dialog.ok_button = QtGui.QPushButton('Done')
+    dialog.ok_button = QPushButton('Done')
     dialog.ok_button.setDefault(True)
     dialog.ok_button.clicked.connect(dialog.close)
 
-    dialog.widget = QtWidgets.QWidget(dialog)
-    dialog.horizontalLayout = QtWidgets.QHBoxLayout(dialog.widget)
+    dialog.widget = QWidget(dialog)
+    dialog.horizontalLayout = QHBoxLayout(dialog.widget)
     dialog.horizontalLayout.setContentsMargins(-1, -1, -1, 0)
     dialog.horizontalLayout.setObjectName("horizontalLayout")
     dialog.horizontalLayout.addWidget(dialog.depth_label)
@@ -471,38 +472,38 @@ def get_neuron_depth_data(parent):
     dialog.exec_()
 
 def get_neuron_pos_data(parent):
-    dialog = QtWidgets.QDialog()
+    dialog = QDialog()
     dialog.setWindowTitle("Upload files")
-    dialog.verticalLayout = QtWidgets.QVBoxLayout(dialog)
+    dialog.verticalLayout = QVBoxLayout(dialog)
 
     # Param options
-    dialog.xpos_label = QtWidgets.QLabel(dialog)
+    dialog.xpos_label = QLabel(dialog)
     dialog.xpos_label.setTextFormat(QtCore.Qt.RichText)
     dialog.xpos_label.setText("x position:")
-    dialog.xpos_button = QtGui.QPushButton('Upload')
+    dialog.xpos_button = QPushButton('Upload')
     dialog.xpos_button.setFont(QtGui.QFont("Arial", 10, QtGui.QFont.Bold))
     dialog.xpos_button.clicked.connect(lambda: load_neuron_pos(parent, dialog.xpos_button, xpos=True))
 
-    dialog.ypos_label = QtWidgets.QLabel(dialog)
+    dialog.ypos_label = QLabel(dialog)
     dialog.ypos_label.setTextFormat(QtCore.Qt.RichText)
     dialog.ypos_label.setText("y position:")
-    dialog.ypos_button = QtGui.QPushButton('Upload')
+    dialog.ypos_button = QPushButton('Upload')
     dialog.ypos_button.setFont(QtGui.QFont("Arial", 10, QtGui.QFont.Bold))
     dialog.ypos_button.clicked.connect(lambda: load_neuron_pos(parent, dialog.ypos_button, ypos=True))
 
-    dialog.ok_button = QtGui.QPushButton('Done')
+    dialog.ok_button = QPushButton('Done')
     dialog.ok_button.setDefault(True)
     dialog.ok_button.clicked.connect(dialog.close)
 
-    dialog.widget = QtWidgets.QWidget(dialog)
-    dialog.horizontalLayout = QtWidgets.QHBoxLayout(dialog.widget)
+    dialog.widget = QWidget(dialog)
+    dialog.horizontalLayout = QHBoxLayout(dialog.widget)
     dialog.horizontalLayout.setContentsMargins(-1, -1, -1, 0)
     dialog.horizontalLayout.setObjectName("horizontalLayout")
     dialog.horizontalLayout.addWidget(dialog.xpos_label)
     dialog.horizontalLayout.addWidget(dialog.xpos_button)
 
-    dialog.widget2 = QtWidgets.QWidget(dialog)
-    dialog.horizontalLayout = QtWidgets.QHBoxLayout(dialog.widget2)
+    dialog.widget2 = QWidget(dialog)
+    dialog.horizontalLayout = QHBoxLayout(dialog.widget2)
     dialog.horizontalLayout.setContentsMargins(-1, -1, -1, 0)
     dialog.horizontalLayout.setObjectName("horizontalLayout")
     dialog.horizontalLayout.addWidget(dialog.ypos_label)
@@ -518,7 +519,7 @@ def get_neuron_pos_data(parent):
 
 def load_neuron_pos(parent, button, xpos=False, ypos=False, depth=False):
     try:
-        file_name = QtGui.QFileDialog.getOpenFileName(
+        file_name = QFileDialog.getOpenFileName(
                     parent, "Open *.npy", filter="*.npy")
         data = np.load(file_name[0])
         if xpos and data.size == parent.sp.shape[0]:
@@ -543,7 +544,7 @@ def save_proc(parent): # Save embedding output
     try:
         if parent.embedded:
             if parent.save_path is None:
-                folderName = QtGui.QFileDialog.getExistingDirectory(parent,
+                folderName = QFileDialog.getExistingDirectory(parent,
                                     "Choose save folder")
                 parent.save_path = folderName
                     
@@ -574,7 +575,7 @@ def save_proc(parent): # Save embedding output
 
 def load_proc(parent, name=None):
     if name is None:
-        name = QtGui.QFileDialog.getOpenFileName(
+        name = QFileDialog.getOpenFileName(
             parent, "Open processed file", filter="*.npy"
             )
         parent.fname = name[0]
