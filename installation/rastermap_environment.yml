@@ -1,0 +1,19 @@
+name: rastermap
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python==3.7.12
+  - pip
+  - numpy==1.21.2
+  - numba==0.55.1
+  - matplotlib
+  - scipy==1.7.3
+  - scikit-learn==1.0.2
+  - pyqt==5.12.3
+  - ipykernel
+  - pip:
+    - natsort==8.1.0
+    - pyqt5==5.15.1
+    - pyqt5-sip==12.8.1
+    - pyqtgraph==0.11.0
